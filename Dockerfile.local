@@ -1,0 +1,17 @@
+FROM python:3.13-slim
+
+# Avoids .pyc clutter in the repo.
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Forces Python to output text directly to the terminal (stdout and stderr) without buffering.
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /code
+
+COPY requirements.txt /code/
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+COPY . /code/
+
+# Should switch gunicorn eventually?
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

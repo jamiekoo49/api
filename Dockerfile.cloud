@@ -1,0 +1,27 @@
+FROM python:3.13-slim
+
+# Avoids .pyc clutter in the repo.
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Forces Python to output text directly to the terminal (stdout and stderr) without buffering.
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /code
+
+COPY requirements.txt /code/
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Add awscli + jq in order to fetch secrets from AWS Secrets Manager
+RUN apt-get update && apt-get install -y curl jq ca-certificates && rm -rf /var/lib/apt/lists/* \
+    && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && apt-get update && apt-get install -y unzip && unzip awscliv2.zip && ./aws/install && rm -rf aws awscliv2.zip
+
+COPY . /code/
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENV DJANGO_SETTINGS_MODULE=api.settings
+RUN python manage.py collectstatic --noinput
+
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["gunicorn", "api.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--threads", "2", "--timeout", "60"]

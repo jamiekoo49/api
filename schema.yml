@@ -1,0 +1,1023 @@
+openapi: 3.0.3
+info:
+  title: ShowNxt API
+  version: 1.0.0
+  description: API documentation for ShowNxt
+paths:
+  /accounts/:
+    put:
+      operationId: accounts_update
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AccountUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AccountUpdate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+          description: ''
+  /accounts/{object}/{id}:
+    delete:
+      operationId: accounts_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: object
+        schema:
+          type: string
+          enum:
+          - athleteexam
+          - clubs
+          - leagues
+          - personalstatistic
+          - sportstatistic
+        description: Type of athlete data to delete
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Athlete data deleted successfully
+        '404':
+          description: Athlete data not found
+  /accounts/{id}/:
+    get:
+      operationId: accounts_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+          description: ''
+        '404':
+          description: Account not found
+  /auth/confirm/:
+    post:
+      operationId: auth_confirm_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmCode'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConfirmCode'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConfirmCode'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: User confirmed successfully
+        '400':
+          description: Invalid or expired confirmation code
+        '500':
+          description: Confirmation failed
+  /auth/confirm-forgot-password/:
+    post:
+      operationId: auth_confirm_forgot_password_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmForgotPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConfirmForgotPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConfirmForgotPassword'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Confirm Forgot Password endpoint
+  /auth/forgot-password/:
+    post:
+      operationId: auth_forgot_password_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Forgot Password endpoint
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+        '401':
+          description: Invalid credentials
+        '403':
+          description: User not confirmed
+        '404':
+          description: User not found
+        '500':
+          description: Login failed
+  /auth/refresh-token/:
+    post:
+      operationId: auth_refresh_token_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Refresh Token endpoint
+  /auth/register/:
+    put:
+      operationId: auth_register_update
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: User already exists
+        '500':
+          description: Registration failed
+  /auth/resend/:
+    post:
+      operationId: auth_resend_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Confirmation code resent successfully
+        '400':
+          description: User not found
+        '500':
+          description: Internal server error
+  /openings/:
+    get:
+      operationId: openings_list
+      tags:
+      - openings
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Opening'
+          description: ''
+  /openings/apply/:
+    post:
+      operationId: openings_apply_create
+      tags:
+      - openings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Applicant'
+          description: ''
+  /openings/my-applications/:
+    get:
+      operationId: openings_my_applications_list
+      tags:
+      - openings
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Applicant'
+          description: ''
+components:
+  schemas:
+    AccountResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+        background_image:
+          type: string
+          format: uri
+          nullable: true
+        athlete:
+          $ref: '#/components/schemas/Athlete'
+        coach:
+          $ref: '#/components/schemas/Coach'
+      required:
+      - athlete
+      - coach
+      - email
+      - id
+    AccountTypeEnum:
+      enum:
+      - athlete
+      - coach
+      type: string
+      description: |-
+        * `athlete` - athlete
+        * `coach` - coach
+    AccountUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+        background_image:
+          type: string
+          format: uri
+          nullable: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        athlete:
+          $ref: '#/components/schemas/Athlete'
+        coach:
+          $ref: '#/components/schemas/Coach'
+      required:
+      - id
+    Address:
+      type: object
+      properties:
+        address_one:
+          type: string
+          maxLength: 100
+        address_two:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 10
+        state:
+          allOf:
+          - $ref: '#/components/schemas/State'
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/Country'
+          readOnly: true
+      required:
+      - address_one
+      - country
+      - state
+    Applicant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        opening:
+          type: integer
+        athlete:
+          type: integer
+        applied_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_new:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        status_updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - applied_at
+      - athlete
+      - id
+      - opening
+      - status_updated_at
+    Athlete:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        height:
+          type: number
+          format: double
+          nullable: true
+          description: Height in inches
+        weight:
+          type: number
+          format: double
+          nullable: true
+          description: Weight in pounds
+        sport:
+          $ref: '#/components/schemas/Sport'
+        position:
+          $ref: '#/components/schemas/Position'
+        gpa:
+          type: number
+          format: double
+          nullable: true
+        is_gpa_weighted:
+          type: boolean
+        sat:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        act:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        budget:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Yearly School Budget in USD
+        highschool_grad_year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        highschool:
+          $ref: '#/components/schemas/Highschool'
+        university:
+          $ref: '#/components/schemas/University'
+        clubs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Club'
+        leagues:
+          type: array
+          items:
+            $ref: '#/components/schemas/League'
+        sport_statistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/SportStatistic'
+        personal_statistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonalStatistic'
+        exams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AthleteExam'
+      required:
+      - uuid
+    AthleteExam:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        exam:
+          allOf:
+          - $ref: '#/components/schemas/Exam'
+          readOnly: true
+        score:
+          type: number
+          format: double
+          nullable: true
+        date_taken:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - exam
+      - id
+    AthleticDivisionEnum:
+      enum:
+      - NCAA Division I
+      - NCAA Division II
+      - NCAA Division III
+      - NAIA
+      - NJCAA
+      - Other
+      type: string
+      description: |-
+        * `NCAA Division I` - NCAA Division I
+        * `NCAA Division II` - NCAA Division II
+        * `NCAA Division III` - NCAA Division III
+        * `NAIA` - NAIA
+        * `NJCAA` - NJCAA
+        * `Other` - Other
+    Club:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        sport:
+          allOf:
+          - $ref: '#/components/schemas/Sport'
+          readOnly: true
+      required:
+      - id
+      - name
+      - sport
+    Coach:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        university:
+          $ref: '#/components/schemas/University'
+        title:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - uuid
+    ConfirmCode:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        code:
+          type: string
+          maxLength: 6
+      required:
+      - code
+      - email
+    ConfirmForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        confirmation_code:
+          type: string
+          maxLength: 6
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - confirmation_code
+      - email
+      - password
+    Country:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 40
+        code:
+          type: string
+          maxLength: 2
+    Exam:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        exam_type:
+          $ref: '#/components/schemas/ExamTypeEnum'
+      required:
+      - exam_type
+      - name
+      - uuid
+    ExamTypeEnum:
+      enum:
+      - AP
+      - IB
+      type: string
+      description: |-
+        * `AP` - AP
+        * `IB` - IB
+    ForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    GenderEnum:
+      enum:
+      - male
+      - female
+      - other
+      type: string
+      description: |-
+        * `male` - Male
+        * `female` - Female
+        * `other` - Other
+    Highschool:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        address:
+          $ref: '#/components/schemas/Address'
+        bio:
+          type: string
+        logo:
+          type: string
+          format: uri
+          nullable: true
+        background_image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - address
+      - name
+      - uuid
+    League:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        sport:
+          allOf:
+          - $ref: '#/components/schemas/Sport'
+          readOnly: true
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+      required:
+      - id
+      - name
+      - sport
+    LevelEnum:
+      enum:
+      - youth
+      - highschool
+      - club
+      - college
+      - professional
+      - other
+      type: string
+      description: |-
+        * `youth` - Youth
+        * `highschool` - High School
+        * `club` - Club
+        * `college` - College
+        * `professional` - Professional
+        * `other` - Other
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    LoginResponse:
+      type: object
+      properties:
+        AccessToken:
+          type: string
+        ExpiresIn:
+          type: integer
+        IdToken:
+          type: string
+        RefreshToken:
+          type: string
+        TokenType:
+          type: string
+      required:
+      - AccessToken
+      - ExpiresIn
+      - IdToken
+      - RefreshToken
+      - TokenType
+    Opening:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        posted_by:
+          type: integer
+        description:
+          type: string
+        sport:
+          type: integer
+        positions:
+          type: array
+          items:
+            type: integer
+        gpa:
+          type: number
+          format: double
+          nullable: true
+        is_gpa_weighted:
+          type: boolean
+        sat:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        act:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        min_budget:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Minimum Yearly School Budget in USD
+        max_budget:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Maximum Yearly School Budget in USD
+        grad_year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        exam_scores:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - exam_scores
+      - id
+      - posted_by
+      - sport
+      - updated_at
+    PersonalStatistic:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        value:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+      - value
+    Position:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sport:
+          allOf:
+          - $ref: '#/components/schemas/Sport'
+          readOnly: true
+        abbreviation:
+          type: string
+          maxLength: 10
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - abbreviation
+      - id
+      - name
+      - sport
+    RefreshToken:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          writeOnly: true
+      required:
+      - refresh_token
+    Register:
+      type: object
+      properties:
+        account_type:
+          $ref: '#/components/schemas/AccountTypeEnum'
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          maxLength: 15
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - account_type
+      - email
+      - password
+    ResendCode:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    SeasonEnum:
+      enum:
+      - spring
+      - summer
+      - fall
+      - winter
+      type: string
+      description: |-
+        * `spring` - Spring
+        * `summer` - Summer
+        * `fall` - Fall
+        * `winter` - Winter
+    Sport:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+      required:
+      - gender
+      - id
+      - name
+    SportStatistic:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sport:
+          allOf:
+          - $ref: '#/components/schemas/Sport'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        season:
+          $ref: '#/components/schemas/SeasonEnum'
+        club:
+          allOf:
+          - $ref: '#/components/schemas/Club'
+          readOnly: true
+        highschool:
+          allOf:
+          - $ref: '#/components/schemas/Highschool'
+          readOnly: true
+        value:
+          type: string
+          maxLength: 100
+      required:
+      - club
+      - highschool
+      - id
+      - name
+      - season
+      - sport
+      - value
+      - year
+    State:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 165
+        code:
+          type: string
+          maxLength: 8
+    StatusEnum:
+      enum:
+      - pending
+      - reviewed
+      - accepted
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `reviewed` - Reviewed
+        * `accepted` - Accepted
+        * `rejected` - Rejected
+    University:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        address:
+          $ref: '#/components/schemas/Address'
+        bio:
+          type: string
+        athletic_division:
+          $ref: '#/components/schemas/AthleticDivisionEnum'
+        acceptance_rate:
+          type: number
+          format: double
+          nullable: true
+          description: Percentage (0-100)
+        logo:
+          type: string
+          format: uri
+          nullable: true
+        background_image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - address
+      - athletic_division
+      - name
+      - uuid
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

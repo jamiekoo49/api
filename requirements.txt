@@ -1,0 +1,19 @@
+django-cors-headers==4.7.0              # Enable in-browser requests to your Django application from other origins, especially for local dev.
+Django==5.2.1                           # Web framework for building web applications.
+djangorestframework==3.16.0             # Django Rest Framework for API development.
+requests==2.32.4                        # HTTP client for outbound API calls.
+gunicorn==23.0.0                        # WSGI HTTP Server for running Django.
+psycopg[binary]                         # PostgreSQL adapter for Python.
+python-dotenv==1.1.0                    # For loading environment variables from .env.
+pytest-django==4.11.1                   # Django plugin for pytest to enable testing Django applications.
+pytest-cov==6.2.1                       # Pytest plugin for measuring code coverage.
+ruff==0.12.7                            # Fast Python linter and code formatter.
+pre-commit==4.2.0                       # Framework for managing and maintaining multi-language pre-commit hooks.
+sentry-sdk==2.35.0                      # Sentry SDK for error tracking and monitoring.
+drf-spectacular==0.28.0
+cryptography==46.0.3
+djangorestframework-jwt==1.11.0
+PyJWT==1.7.1
+whitenoise==6.11.0
+boto3==1.40.74
+posthog==7.0.1
